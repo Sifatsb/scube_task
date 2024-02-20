@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -13,12 +15,22 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HomeView'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'HomeView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: Obx(() => ListView.builder(
+        itemCount: controller.projects.length + 1,
+        itemBuilder: (context, index) {
+          if (index < controller.projects.length) {
+            return ListTile(
+              title: Text('${controller.projects[index].projectName}'),
+              subtitle: Text('${controller.projects[index].assignedEngineer}'),
+            );
+          } else if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return Container();
+          }
+        },
+        controller: controller.scrollController,
+      )),
     );
   }
 }
