@@ -17,9 +17,9 @@ class HomeView extends GetView<HomeController> {
         centerTitle: true,
       ),
       body: Obx(() => ListView.builder(
-            itemCount: controller.projects.length + 1,
+            itemCount: controller.projectsList.length + 1,
             itemBuilder: (context, index) {
-              if (index < controller.projects.length) {
+              if (index < controller.projectsList.length) {
                 return Container(
                   padding: const EdgeInsets.all(6),
                   // margin: const EdgeInsets.all(3),
@@ -31,8 +31,8 @@ class HomeView extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(controller.projects[index].projectName ?? 'No Data'),
-                      Text(controller.projects[index].assignedEngineer ?? 'No Data'),
+                      Text(controller.projectsList[index].projectName ?? 'No Data'),
+                      Text(controller.projectsList[index].assignedEngineer ?? 'No Data'),
                       // IconButton(onPressed: (){
                       // }, icon: const Icon(Icons.more_vert_outlined))
 
@@ -43,19 +43,18 @@ class HomeView extends GetView<HomeController> {
                         child:  const Icon(Icons.more_vert_outlined),
                         itemBuilder: (context) => [
                           PopupMenuItem(
-                            value: 1,
-                            onTap: (){},
+                            onTap: (){
+                              controller.showDetailsBottomSheet(index: index);
+                            },
                             child:  Text("View".tr),
                           ),
                           const PopupMenuDivider(),
                           PopupMenuItem(
-                            value: 2,
                             onTap: (){},
                             child:  Text("Add".tr),
                           ),
                           const PopupMenuDivider(),
                           PopupMenuItem(
-                            value: 2,
                             onTap: (){},
                             child:  Text("Update".tr),
                           ),

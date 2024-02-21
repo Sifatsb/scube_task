@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:scube_task/app/data/constants/app_colors.dart';
 import 'package:scube_task/app/utilities/message/snack_bars.dart';
 import 'package:scube_task/domain/core/model/all_project_response_model.dart';
 
 class HomeController extends GetxController {
-  List<AllProjectResponseModel> projects = [];
+  List<AllProjectResponseModel> projectsList = [];
 
   // List<dynamic> projects = [];
   RxBool isLoading = false.obs;
@@ -37,7 +38,7 @@ class HomeController extends GetxController {
             .map((json) => AllProjectResponseModel.fromJson(json))
             .toList();
 
-        projects.addAll(newProjects);
+        projectsList.addAll(newProjects);
         isLoading.value = false;
         offset.value += newProjects.length;
       } else {
@@ -51,6 +52,72 @@ class HomeController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void showDetailsBottomSheet({required int index}) {
+    Get.bottomSheet(
+      Container(
+        height: Get.height * 0.45,
+        width: Get.width,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(8),
+            topLeft: Radius.circular(8),
+          ),
+          color: AppColors.secondaryColor,
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Project:   ${projectsList[index].projectName}',
+                ),
+                Text(
+                  'Engineer:  ${projectsList[index].assignedEngineer}',
+                ),
+                Text(
+                  'Technician:  ${projectsList[index].assignedTechnician}',
+                ),
+                Text(
+                  'Project Update:  ${projectsList[index].projectUpdate}',
+                ),
+                Text(
+                  'Duration:  ${projectsList[index].duration}',
+                ),
+                Text(
+                  'Start Day:   ${projectsList[index].startDayOfYear}',
+                ),
+                Text(
+                  'End Day:   ${projectsList[index].endDayOfYear}',
+                ),
+                Text(
+                  'Start Date:  ${projectsList[index].startDate}',
+                ),
+                Text(
+                  'End Date:  ${projectsList[index].endDate}',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      backgroundColor: AppColors.primaryColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            8,
+          ),
+          topRight: Radius.circular(
+            8,
+          ),
+        ),
+      ),
+      isDismissible: true,
+    );
   }
 
   @override
