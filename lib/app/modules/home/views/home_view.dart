@@ -50,12 +50,27 @@ class HomeView extends GetView<HomeController> {
                           ),
                           const PopupMenuDivider(),
                           PopupMenuItem(
-                            onTap: (){},
+                            onTap: (){
+
+                            },
                             child:  Text("Add".tr),
                           ),
                           const PopupMenuDivider(),
                           PopupMenuItem(
-                            onTap: (){},
+                            onTap: (){
+
+                              controller.startDateTextController.text = controller.projectsList[index].startDate ?? '';
+                              controller.endDateTextController.text = controller.projectsList[index].endDate ?? '';
+                              controller.startDayTextController.text = controller.projectsList[index].startDayOfYear.toString() ?? '';
+                              controller.endDayTextController.text = controller.projectsList[index] .endDayOfYear.toString() ?? '';
+                              controller.projectNameTextController.text = controller.projectsList[index].projectName ?? '';
+                              controller.projectUpdateTextController.text = controller.projectsList[index].projectUpdate ?? '';
+                              controller.engineerTextController.text = controller.projectsList[index].assignedEngineer ?? '';
+                              controller.technicianTextController.text = controller.projectsList[index].assignedTechnician ?? '';
+                              controller.durationTextController.text = controller.projectsList[index].duration.toString() ?? '';
+
+                              controller.editInfoBottomSheet(index: index);
+                            },
                             child:  Text("Update".tr),
                           ),
                         ],
