@@ -131,7 +131,6 @@ class HomeController extends GetxController {
     return AllProjectResponseModel();
   }
 
-
   Future<AllProjectResponseModel> addInfo() async {
     updateInfoLoader.value = true;
     try {
@@ -207,8 +206,6 @@ class HomeController extends GetxController {
       endDate.value = endDateTextController.text;
     }
   }
-
-
 
   void showDetailsBottomSheet({required int index}) {
     Get.bottomSheet(
@@ -400,21 +397,21 @@ class HomeController extends GetxController {
                 ),
               ),
               Obx(() => CustomTextFieldWithTile(
-                title: 'Start Date',
-                controller: startDateTextController,
-                hintTex: startDate.value,
-                color: Colors.white,
-                readOnly: true,
-                iconOnTap: _pickStartDate,
-              )),
+                    title: 'Start Date',
+                    controller: startDateTextController,
+                    hintTex: startDate.value,
+                    color: Colors.white,
+                    readOnly: true,
+                    iconOnTap: _pickStartDate,
+                  )),
               Obx(() => CustomTextFieldWithTile(
-                title: 'End Date',
-                controller: endDateTextController,
-                hintTex: endDate.value,
-                color: AppColors.ofWhiteColor,
-                readOnly: true,
-                iconOnTap: _pickEndDate,
-              )),
+                    title: 'End Date',
+                    controller: endDateTextController,
+                    hintTex: endDate.value,
+                    color: AppColors.ofWhiteColor,
+                    readOnly: true,
+                    iconOnTap: _pickEndDate,
+                  )),
               CustomTextFieldWithTile(
                 title: 'Start Day',
                 controller: startDayTextController,
@@ -462,19 +459,19 @@ class HomeController extends GetxController {
               const Spacer(),
               Obx(() => updateInfoLoader.value
                   ? const Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : Center(
-                child: PrimaryButton(
-                  text: 'Add',
-                  width: Get.width / 2.5,
-                  color: Colors.green,
-                  borderRadius: 5,
-                  onTap: () {
-                    addInfo();
-                  },
-                ),
-              )),
+                      child: PrimaryButton(
+                        text: 'Add',
+                        width: Get.width / 2.5,
+                        color: Colors.green,
+                        borderRadius: 5,
+                        onTap: () {
+                          addInfo();
+                        },
+                      ),
+                    )),
               31.verticalSpacing,
             ],
           )),

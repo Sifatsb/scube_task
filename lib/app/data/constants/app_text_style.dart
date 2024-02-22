@@ -22,6 +22,13 @@ class AppTextStyle {
     color: Color(0xFF635976),
   );
 
+  static const blackFontSize16W700 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'Inter',
+    color: Color(0xFF635976),
+  );
+
   static const customTextFieldTextStyle = TextStyle(
     color: AppColors.textColor635976,
     fontSize: 12,
@@ -39,6 +46,4 @@ class AppTextStyle {
     fontSize: 10,
     fontWeight: FontWeight.w400,
   );
-
-
 }

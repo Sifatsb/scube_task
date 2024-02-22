@@ -7,10 +7,14 @@ class BottomSheetTile extends StatelessWidget {
   final String? title;
   final String? value;
   final Color? color;
+  final Color? borderColor;
   final bool hasMultipleData;
   final Widget? listview;
   final double? width;
   final double? height;
+  final double? boxHeight;
+  final TextStyle? titleTextStyle;
+  final TextStyle? valueTextStyle;
 
   const BottomSheetTile({
     super.key,
@@ -21,15 +25,19 @@ class BottomSheetTile extends StatelessWidget {
     this.listview,
     this.width,
     this.height,
+    this.boxHeight,
+    this.titleTextStyle,
+    this.valueTextStyle,
+    this.borderColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height * 0.04,
+      height: boxHeight ?? Get.height * 0.04,
       decoration: BoxDecoration(
         border: Border.all(
-          color: AppColors.ofWhiteColor,
+          color: borderColor ?? AppColors.ofWhiteColor,
         ),
         color: color,
       ),
@@ -40,7 +48,7 @@ class BottomSheetTile extends StatelessWidget {
             width: width ?? Get.width * 0.35,
             child: Text(
               title ?? "",
-              style: AppTextStyle.fontSize10GreyW500,
+              style: titleTextStyle ?? AppTextStyle.fontSize10GreyW500,
             ),
           ),
           VerticalDivider(
@@ -51,7 +59,7 @@ class BottomSheetTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 0.0),
             child: Text(
               value ?? "",
-              style: AppTextStyle.blackFontSize10W400,
+              style: valueTextStyle ?? AppTextStyle.blackFontSize10W400,
             ),
           ),
         ],

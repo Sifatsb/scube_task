@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scube_task/app/data/constants/app_text_style.dart';
 
-
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final Color? fillColor;
@@ -26,31 +25,30 @@ class CustomTextFormField extends StatelessWidget {
   final double? height;
   final double? borderRadius;
 
-  const CustomTextFormField({
-    this.controller,
-    this.fillColor,
-    this.hintText,
-    this.focusBorderActive = false,
-    this.enableBorderActive = false,
-    this.suffixIcon,
-    this.iconOnTap,
-    this.obsCureText = false,
-    this.textInputType,
-    this.labelTextStyle,
-    this.enableBorderActiveColor,
-    this.maxLine,
-    this.minLine,
-    this.onTap,
-    this.readOnly = false,
-    super.key,
-    this.contentPadding,
-    this.hintTextStyle,
-    this.inputBorder,
-    this.prefixIcon,
-    this.textStyle,
-    this.height,
-    this.borderRadius
-  });
+  const CustomTextFormField(
+      {this.controller,
+      this.fillColor,
+      this.hintText,
+      this.focusBorderActive = false,
+      this.enableBorderActive = false,
+      this.suffixIcon,
+      this.iconOnTap,
+      this.obsCureText = false,
+      this.textInputType,
+      this.labelTextStyle,
+      this.enableBorderActiveColor,
+      this.maxLine,
+      this.minLine,
+      this.onTap,
+      this.readOnly = false,
+      super.key,
+      this.contentPadding,
+      this.hintTextStyle,
+      this.inputBorder,
+      this.prefixIcon,
+      this.textStyle,
+      this.height,
+      this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +69,7 @@ class CustomTextFormField extends StatelessWidget {
               border: inputBorder,
               fillColor: fillColor ?? const Color(0xFFFDFBFF),
               hintText: hintText ?? 'Enter text',
-              hintStyle: hintTextStyle ?? AppTextStyle.hintTextStyle
-
-              ,
+              hintStyle: hintTextStyle ?? AppTextStyle.hintTextStyle,
               prefix: prefixIcon,
               suffixIcon: InkWell(
                   onTap: iconOnTap, child: suffixIcon ?? const SizedBox()),
@@ -94,12 +90,10 @@ class CustomTextFormField extends StatelessWidget {
                       borderRadius: BorderRadius.circular(borderRadius ?? 2.0),
                     )
                   : null,
-              contentPadding: contentPadding ?? const EdgeInsets.fromLTRB(10, -8, 10, 14)),
+              contentPadding:
+                  contentPadding ?? const EdgeInsets.fromLTRB(10, -8, 10, 14)),
         ),
       ),
     );
   }
 }
-
-
-

@@ -15,19 +15,18 @@ class CustomTextFieldWithTile extends StatelessWidget {
   final Function()? iconOnTap;
   final TextInputType? keyboardType;
 
-
-  const CustomTextFieldWithTile(
-      {super.key,
-        this.title,
-        this.value,
-        this.color,
-        required this.controller,
-        this.hintTex,
-        this.readOnly = false,
-      this.iconOnTap,
-        this.dateController,
-        this.keyboardType,
-      });
+  const CustomTextFieldWithTile({
+    super.key,
+    this.title,
+    this.value,
+    this.color,
+    required this.controller,
+    this.hintTex,
+    this.readOnly = false,
+    this.iconOnTap,
+    this.dateController,
+    this.keyboardType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,32 +63,39 @@ class CustomTextFieldWithTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(0.5),
                   color: Colors.white,
                   border:
-                  Border.all(color: AppColors.appColorB5C1CB, width: 0.5)),
-              child: readOnly ? CustomTextFormField(
-                iconOnTap: iconOnTap,
-                readOnly: true,
-                controller: dateController,
-                enableBorderActive: true,
-                focusBorderActive: true,
-                hintText: hintTex ?? "Select Date",
-                fillColor: Colors.white,
-                hintTextStyle: AppTextStyle.hintTextStyle,
-                suffixIcon: const Icon(Icons.date_range_outlined, color: Colors.black, size: 16,),
-              ) : TextField(
-                controller: controller,
-                readOnly: readOnly,
-                style: AppTextStyle.font10Weight400,
-                keyboardType: keyboardType,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.fromLTRB(10, -6, 10, 14),
-                  hintText: hintTex ?? "Input...",
-                  enabledBorder: InputBorder.none,
-                  border: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                ),
-              ),
+                      Border.all(color: AppColors.appColorB5C1CB, width: 0.5)),
+              child: readOnly
+                  ? CustomTextFormField(
+                      iconOnTap: iconOnTap,
+                      readOnly: true,
+                      controller: dateController,
+                      enableBorderActive: true,
+                      focusBorderActive: true,
+                      hintText: hintTex ?? "Select Date",
+                      fillColor: Colors.white,
+                      hintTextStyle: AppTextStyle.hintTextStyle,
+                      suffixIcon: const Icon(
+                        Icons.date_range_outlined,
+                        color: Colors.black,
+                        size: 16,
+                      ),
+                    )
+                  : TextField(
+                      controller: controller,
+                      readOnly: readOnly,
+                      style: AppTextStyle.font10Weight400,
+                      keyboardType: keyboardType,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(10, -6, 10, 14),
+                        hintText: hintTex ?? "Input...",
+                        enabledBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                    ),
             ),
           )
         ],
