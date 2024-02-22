@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:scube_task/app/data/constants/app_colors.dart';
+import 'package:scube_task/app/data/constants/app_text_style.dart';
+import 'package:scube_task/app/modules/home/views/widgets/bottom_sheet_tile.dart';
+import 'package:scube_task/app/modules/home/views/widgets/bottom_tile_with_field.dart';
 import 'package:scube_task/app/utilities/common_widgets/custom_text_field.dart';
+import 'package:scube_task/app/utilities/common_widgets/default_bottom_sheet_shape.dart';
 import 'package:scube_task/app/utilities/common_widgets/primary_button.dart';
 import 'package:scube_task/app/utilities/extensions/widget.extensions.dart';
 import 'package:scube_task/app/utilities/message/snack_bars.dart';
 import 'package:scube_task/domain/core/model/all_project_response_model.dart';
 
 class HomeController extends GetxController {
-  RxList<AllProjectResponseModel> projectsList = <AllProjectResponseModel>[].obs;
+  RxList<AllProjectResponseModel> projectsList =
+      <AllProjectResponseModel>[].obs;
 
   RxBool isLoading = false.obs;
   RxBool updateInfoLoader = false.obs;
@@ -67,22 +72,24 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<AllProjectResponseModel> updateInfo({required int projectId, required int index}) async {
-
+  Future<AllProjectResponseModel> updateInfo(
+      {required int projectId, required int index}) async {
     updateInfoLoader.value = true;
     try {
-      
-      final response = await http.put(Uri.parse('https://scubetech.xyz/projects/dashboard/update-project-elements/$projectId/'), body: {
-        "start_date": startDateTextController.text,
-        "end_date": endDateTextController.text,
-        "project_name": projectNameTextController.text,
-        "project_update": projectUpdateTextController.text,
-        "assigned_engineer": engineerTextController.text,
-        "assigned_technician": technicianTextController.text,
-        "start_day_of_year": startDayTextController.text,
-        "end_day_of_year": endDayTextController.text,
-        "duration": durationTextController.text,
-      });
+      final response = await http.put(
+          Uri.parse(
+              'https://scubetech.xyz/projects/dashboard/update-project-elements/$projectId/'),
+          body: {
+            "start_date": startDateTextController.text,
+            "end_date": endDateTextController.text,
+            "project_name": projectNameTextController.text,
+            "project_update": projectUpdateTextController.text,
+            "assigned_engineer": engineerTextController.text,
+            "assigned_technician": technicianTextController.text,
+            "start_day_of_year": startDayTextController.text,
+            "end_day_of_year": endDayTextController.text,
+            "duration": durationTextController.text,
+          });
 
       debugPrint('Response ::: ${response.body}');
 
@@ -94,13 +101,12 @@ class HomeController extends GetxController {
         projectsList[index] = updatedProject;
         projectsList.refresh();
         Get.back();
-      }
-      else {
+        showBasicSuccessSnackBar(
+            message: 'Updated Successfully', positionTop: true);
+      } else {
         updateInfoLoader.value = false;
         showBasicFailedSnackBar(message: 'Something went wrong.');
       }
-
-
     } catch (e, t) {
       debugPrint('Error fetching projects: $e');
       debugPrint('Error fetching projects: $t');
@@ -110,133 +116,179 @@ class HomeController extends GetxController {
     }
 
     return AllProjectResponseModel();
-
   }
 
   void showDetailsBottomSheet({required int index}) {
     Get.bottomSheet(
-      Container(
-        height: Get.height * 0.45,
-        width: Get.width,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(8),
-            topLeft: Radius.circular(8),
-          ),
-          color: AppColors.secondaryColor,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Project:   ${projectsList[index].projectName}',
+      SizedBox(
+          height: Get.height * 0.7,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              10.verticalSpacing,
+              const Padding(
+                padding: EdgeInsets.all(17.0),
+                child: Text(
+                  'Project Info',
+                  style: AppTextStyle.blackFontSize13W700,
                 ),
-                Text(
-                  'Engineer:  ${projectsList[index].assignedEngineer}',
-                ),
-                Text(
-                  'Technician:  ${projectsList[index].assignedTechnician}',
-                ),
-                Text(
-                  'Project Update:  ${projectsList[index].projectUpdate}',
-                ),
-                Text(
-                  'Duration:  ${projectsList[index].duration}',
-                ),
-                Text(
-                  'Start Day:   ${projectsList[index].startDayOfYear}',
-                ),
-                Text(
-                  'End Day:   ${projectsList[index].endDayOfYear}',
-                ),
-                Text(
-                  'Start Date:  ${projectsList[index].startDate}',
-                ),
-                Text(
-                  'End Date:  ${projectsList[index].endDate}',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      backgroundColor: AppColors.primaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            8,
-          ),
-          topRight: Radius.circular(
-            8,
-          ),
-        ),
-      ),
-      isDismissible: true,
+              ),
+              BottomSheetTile(
+                title: "Project",
+                value: projectsList[index].projectName,
+                color: AppColors.ofWhiteColor,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "Engineer",
+                value: projectsList[index].assignedEngineer,
+                color: Colors.white,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "Technician",
+                value: projectsList[index].assignedTechnician,
+                color: AppColors.ofWhiteColor,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "Project Update",
+                value: projectsList[index].projectUpdate,
+                color: Colors.white,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "Duration",
+                value: projectsList[index].duration.toString(),
+                color: AppColors.ofWhiteColor,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "Start Day",
+                value: projectsList[index].startDayOfYear.toString(),
+                color: Colors.white,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "End Day",
+                value: projectsList[index].endDayOfYear.toString(),
+                color: AppColors.ofWhiteColor,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "Start Date",
+                value: projectsList[index].startDate,
+                color: Colors.white,
+                width: 141,
+              ),
+              BottomSheetTile(
+                title: "End Date",
+                value: projectsList[index].endDate,
+                color: AppColors.ofWhiteColor,
+                width: 141,
+              ),
+            ],
+          )),
+      backgroundColor: Colors.white,
+      shape: defaultBottomSheetShape(),
+      isScrollControlled: true,
     );
   }
 
-
   void editInfoBottomSheet({required int index}) {
     Get.bottomSheet(
-      Container(
-        height: Get.height * 0.7,
-        width: Get.width,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(8),
-            topLeft: Radius.circular(8),
-          ),
-          color: Colors.white,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-
-                CustomTextField(tile: 'Start Date', controller: startDateTextController,),
-                CustomTextField(tile: 'End Date', controller: endDateTextController,),
-                CustomTextField(tile: 'Start Day', controller: startDayTextController,),
-                CustomTextField(tile: 'End Day', controller: endDayTextController,),
-                CustomTextField(tile: 'Project Name', controller: projectNameTextController,),
-                CustomTextField(tile: 'Project Update', controller: projectUpdateTextController,),
-                CustomTextField(tile: 'Engineer', controller: engineerTextController,),
-                CustomTextField(tile: 'Technician', controller: technicianTextController,),
-                CustomTextField(tile: 'Duration', controller: durationTextController,),
-                
-                30.verticalSpacing,
-                
-                Obx(() => updateInfoLoader.value ? const Center(child: CircularProgressIndicator(),) : PrimaryButton(text: 'Update', color: Colors.green, borderRadius: 5,
-                  onTap: (){
-                    updateInfo(projectId: projectsList[index].id!, index: index);
-                  },
-                )),
-
-              ],
-            ),
-          ),
-        ),
-      ),
-      backgroundColor: AppColors.primaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            8,
-          ),
-          topRight: Radius.circular(
-            8,
-          ),
-        ),
-      ),
-      isDismissible: true,
+      SizedBox(
+          height: Get.height * 0.7,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              10.verticalSpacing,
+              const Padding(
+                padding: EdgeInsets.all(17.0),
+                child: Text(
+                  'Edit Info',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Inter',
+                      color: Color(0xFF635976)),
+                ),
+              ),
+              CustomTextFieldWithTile(
+                title: 'Start Date',
+                controller: startDateTextController,
+                hintTex: 'Start Date...',
+                color: Colors.white,
+              ),
+              CustomTextFieldWithTile(
+                  title: 'End Date',
+                  controller: endDateTextController,
+                  hintTex: 'End Date...',
+                  color: AppColors.ofWhiteColor),
+              CustomTextFieldWithTile(
+                title: 'Start Day',
+                controller: startDayTextController,
+                hintTex: 'Start Day...',
+                color: Colors.white,
+              ),
+              CustomTextFieldWithTile(
+                title: 'End Day',
+                controller: endDayTextController,
+                hintTex: 'End Day...',
+                color: AppColors.ofWhiteColor,
+              ),
+              CustomTextFieldWithTile(
+                title: 'Project Name',
+                controller: projectNameTextController,
+                hintTex: 'Project Name...',
+                color: Colors.white,
+              ),
+              CustomTextFieldWithTile(
+                  title: 'Project Update',
+                  controller: projectUpdateTextController,
+                  hintTex: 'Project Update...',
+                  color: AppColors.ofWhiteColor),
+              CustomTextFieldWithTile(
+                title: 'Engineer',
+                controller: engineerTextController,
+                hintTex: 'Engineer...',
+                color: Colors.white,
+              ),
+              CustomTextFieldWithTile(
+                title: 'Technician',
+                controller: technicianTextController,
+                hintTex: 'Technician...',
+                color: AppColors.ofWhiteColor,
+              ),
+              CustomTextFieldWithTile(
+                title: 'Duration',
+                controller: durationTextController,
+                hintTex: 'Duration...',
+                color: Colors.white,
+              ),
+              const Spacer(),
+              Obx(() => updateInfoLoader.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Center(
+                      child: PrimaryButton(
+                        text: 'Update',
+                        width: Get.width / 2.5,
+                        color: Colors.green,
+                        borderRadius: 5,
+                        onTap: () {
+                          updateInfo(
+                              projectId: projectsList[index].id!, index: index);
+                        },
+                      ),
+                    )),
+              31.verticalSpacing,
+            ],
+          )),
+      backgroundColor: Colors.white,
+      shape: defaultBottomSheetShape(),
       isScrollControlled: true,
-
     );
   }
 

@@ -16,7 +16,7 @@ void showBasicSuccessSnackBar({
     return;
   }
   Get.rawSnackbar(
-    backgroundColor: AppColors.primaryColor,
+    backgroundColor: AppColors.textColor635976,
     icon: icon ??
         const Icon(
           Icons.task_alt_rounded,
