@@ -13,8 +13,26 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HomeView'),
-        centerTitle: true,
+        title: const Text('Project Info'),
+        actions: [
+
+          InkWell(
+            onTap: (){
+              controller.addInfoBottomSheet();
+            },
+            child: Container(
+              height: 35,
+              width: 35,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(20)
+              ),
+              child: const Icon(Icons.add, color: Colors.black,),
+            ),
+          ),
+
+
+        ],
       ),
       body: Obx(() => ListView.builder(
             itemCount: controller.projectsList.length + 1,
@@ -47,13 +65,6 @@ class HomeView extends GetView<HomeController> {
                               controller.showDetailsBottomSheet(index: index);
                             },
                             child:  Text("View".tr),
-                          ),
-                          const PopupMenuDivider(),
-                          PopupMenuItem(
-                            onTap: (){
-
-                            },
-                            child:  Text("Add".tr),
                           ),
                           const PopupMenuDivider(),
                           PopupMenuItem(

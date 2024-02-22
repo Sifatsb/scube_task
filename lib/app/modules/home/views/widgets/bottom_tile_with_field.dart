@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scube_task/app/data/constants/app_colors.dart';
 import 'package:scube_task/app/data/constants/app_text_style.dart';
+import 'package:scube_task/app/utilities/common_widgets/text_fields/custom_text_form_field.dart';
 
 class CustomTextFieldWithTile extends StatelessWidget {
   final String? title;
@@ -9,7 +10,11 @@ class CustomTextFieldWithTile extends StatelessWidget {
   final String? hintTex;
   final Color? color;
   final TextEditingController controller;
+  final TextEditingController? dateController;
   final bool readOnly;
+  final Function()? iconOnTap;
+  final TextInputType? keyboardType;
+
 
   const CustomTextFieldWithTile(
       {super.key,
@@ -18,7 +23,11 @@ class CustomTextFieldWithTile extends StatelessWidget {
         this.color,
         required this.controller,
         this.hintTex,
-        this.readOnly = false});
+        this.readOnly = false,
+      this.iconOnTap,
+        this.dateController,
+        this.keyboardType,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +65,21 @@ class CustomTextFieldWithTile extends StatelessWidget {
                   color: Colors.white,
                   border:
                   Border.all(color: AppColors.appColorB5C1CB, width: 0.5)),
-              child: TextField(
+              child: readOnly ? CustomTextFormField(
+                iconOnTap: iconOnTap,
+                readOnly: true,
+                controller: dateController,
+                enableBorderActive: true,
+                focusBorderActive: true,
+                hintText: hintTex ?? "Select Date",
+                fillColor: Colors.white,
+                hintTextStyle: AppTextStyle.hintTextStyle,
+                suffixIcon: const Icon(Icons.date_range_outlined, color: Colors.black, size: 16,),
+              ) : TextField(
                 controller: controller,
                 readOnly: readOnly,
-                style: const TextStyle(
-                  color: AppColors.textColor635976,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: AppTextStyle.font10Weight400,
+                keyboardType: keyboardType,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.fromLTRB(10, -6, 10, 14),
                   hintText: hintTex ?? "Input...",

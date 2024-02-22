@@ -21,4 +21,24 @@ class AppTextStyle {
     fontFamily: 'Inter',
     color: Color(0xFF635976),
   );
+
+  static const customTextFieldTextStyle = TextStyle(
+    color: AppColors.textColor635976,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const hintTextStyle = TextStyle(
+    color: AppColors.hintTextColor,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const font10Weight400 = TextStyle(
+    color: AppColors.textColor635976,
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+  );
+
+
 }

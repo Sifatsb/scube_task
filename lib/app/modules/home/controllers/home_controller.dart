@@ -6,9 +6,9 @@ import 'package:scube_task/app/data/constants/app_colors.dart';
 import 'package:scube_task/app/data/constants/app_text_style.dart';
 import 'package:scube_task/app/modules/home/views/widgets/bottom_sheet_tile.dart';
 import 'package:scube_task/app/modules/home/views/widgets/bottom_tile_with_field.dart';
-import 'package:scube_task/app/utilities/common_widgets/custom_text_field.dart';
 import 'package:scube_task/app/utilities/common_widgets/default_bottom_sheet_shape.dart';
 import 'package:scube_task/app/utilities/common_widgets/primary_button.dart';
+import 'package:scube_task/app/utilities/datepicker_dialogue/date_picker.dart';
 import 'package:scube_task/app/utilities/extensions/widget.extensions.dart';
 import 'package:scube_task/app/utilities/message/snack_bars.dart';
 import 'package:scube_task/domain/core/model/all_project_response_model.dart';
@@ -21,6 +21,8 @@ class HomeController extends GetxController {
   RxBool updateInfoLoader = false.obs;
   RxInt offset = 0.obs;
   RxInt limit = 10.obs;
+  RxString startDate = 'Select Date'.obs;
+  RxString endDate = 'Select Date'.obs;
 
   TextEditingController startDateTextController = TextEditingController();
   TextEditingController endDateTextController = TextEditingController();
@@ -100,6 +102,17 @@ class HomeController extends GetxController {
 
         projectsList[index] = updatedProject;
         projectsList.refresh();
+
+        startDateTextController.clear();
+        endDateTextController.clear();
+        startDayTextController.clear();
+        endDayTextController.clear();
+        projectNameTextController.clear();
+        projectUpdateTextController.clear();
+        engineerTextController.clear();
+        technicianTextController.clear();
+        durationTextController.clear();
+
         Get.back();
         showBasicSuccessSnackBar(
             message: 'Updated Successfully', positionTop: true);
@@ -117,6 +130,85 @@ class HomeController extends GetxController {
 
     return AllProjectResponseModel();
   }
+
+
+  Future<AllProjectResponseModel> addInfo() async {
+    updateInfoLoader.value = true;
+    try {
+      final response = await http.post(
+          Uri.parse(
+              'https://scubetech.xyz/projects/dashboard/add-project-elements/'),
+          body: {
+            "start_date": startDateTextController.text,
+            "end_date": endDateTextController.text,
+            "project_name": projectNameTextController.text,
+            "project_update": projectUpdateTextController.text,
+            "assigned_engineer": engineerTextController.text,
+            "assigned_technician": technicianTextController.text,
+            "start_day_of_year": startDayTextController.text,
+            "end_day_of_year": endDayTextController.text,
+            "duration": durationTextController.text,
+          });
+
+      debugPrint('Response ::: ${response.body}');
+      debugPrint('Response ::: ${response.statusCode}');
+
+      if (response.statusCode >= 200 || response.statusCode <= 207) {
+        updateInfoLoader.value = false;
+
+        startDateTextController.clear();
+        endDateTextController.clear();
+        startDayTextController.clear();
+        endDayTextController.clear();
+        projectNameTextController.clear();
+        projectUpdateTextController.clear();
+        engineerTextController.clear();
+        technicianTextController.clear();
+        durationTextController.clear();
+
+        Get.back();
+        showBasicSuccessSnackBar(
+            message: 'Project element created successfully', positionTop: true);
+      } else {
+        updateInfoLoader.value = false;
+        showBasicFailedSnackBar(message: 'Something went wrong.');
+      }
+    } catch (e, t) {
+      debugPrint('Error fetching projects: $e');
+      debugPrint('Error fetching projects: $t');
+      updateInfoLoader.value = false;
+    } finally {
+      updateInfoLoader.value = false;
+    }
+
+    return AllProjectResponseModel();
+  }
+
+  void _pickStartDate() async {
+    DateTime? dateTime = await DatePickerUtils().pickDate(
+      canSelectPastDate: true,
+      canSelectFutureDate: true,
+    );
+
+    if (dateTime != null) {
+      startDateTextController.text = dateTime.yyyy_mm_dd;
+      startDate.value = startDateTextController.text;
+    }
+  }
+
+  void _pickEndDate() async {
+    DateTime? dateTime = await DatePickerUtils().pickDate(
+      canSelectPastDate: true,
+      canSelectFutureDate: true,
+    );
+
+    if (dateTime != null) {
+      endDateTextController.text = dateTime.yyyy_mm_dd;
+      endDate.value = endDateTextController.text;
+    }
+  }
+
+
 
   void showDetailsBottomSheet({required int index}) {
     Get.bottomSheet(
@@ -283,6 +375,106 @@ class HomeController extends GetxController {
                         },
                       ),
                     )),
+              31.verticalSpacing,
+            ],
+          )),
+      backgroundColor: Colors.white,
+      shape: defaultBottomSheetShape(),
+      isScrollControlled: true,
+    );
+  }
+
+  void addInfoBottomSheet() {
+    Get.bottomSheet(
+      SizedBox(
+          height: Get.height * 0.7,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              10.verticalSpacing,
+              const Padding(
+                padding: EdgeInsets.all(17.0),
+                child: Text(
+                  'Edit Info',
+                  style: AppTextStyle.blackFontSize13W700,
+                ),
+              ),
+              Obx(() => CustomTextFieldWithTile(
+                title: 'Start Date',
+                controller: startDateTextController,
+                hintTex: startDate.value,
+                color: Colors.white,
+                readOnly: true,
+                iconOnTap: _pickStartDate,
+              )),
+              Obx(() => CustomTextFieldWithTile(
+                title: 'End Date',
+                controller: endDateTextController,
+                hintTex: endDate.value,
+                color: AppColors.ofWhiteColor,
+                readOnly: true,
+                iconOnTap: _pickEndDate,
+              )),
+              CustomTextFieldWithTile(
+                title: 'Start Day',
+                controller: startDayTextController,
+                hintTex: 'Start Day...',
+                color: Colors.white,
+                keyboardType: TextInputType.number,
+              ),
+              CustomTextFieldWithTile(
+                title: 'End Day',
+                controller: endDayTextController,
+                hintTex: 'End Day...',
+                color: AppColors.ofWhiteColor,
+                keyboardType: TextInputType.number,
+              ),
+              CustomTextFieldWithTile(
+                title: 'Project Name',
+                controller: projectNameTextController,
+                hintTex: 'Project Name...',
+                color: Colors.white,
+              ),
+              CustomTextFieldWithTile(
+                  title: 'Project Update',
+                  controller: projectUpdateTextController,
+                  hintTex: 'Project Update...',
+                  color: AppColors.ofWhiteColor),
+              CustomTextFieldWithTile(
+                title: 'Engineer',
+                controller: engineerTextController,
+                hintTex: 'Engineer...',
+                color: Colors.white,
+              ),
+              CustomTextFieldWithTile(
+                title: 'Technician',
+                controller: technicianTextController,
+                hintTex: 'Technician...',
+                color: AppColors.ofWhiteColor,
+              ),
+              CustomTextFieldWithTile(
+                title: 'Duration',
+                controller: durationTextController,
+                hintTex: 'Duration...',
+                color: Colors.white,
+                keyboardType: TextInputType.number,
+              ),
+              const Spacer(),
+              Obx(() => updateInfoLoader.value
+                  ? const Center(
+                child: CircularProgressIndicator(),
+              )
+                  : Center(
+                child: PrimaryButton(
+                  text: 'Add',
+                  width: Get.width / 2.5,
+                  color: Colors.green,
+                  borderRadius: 5,
+                  onTap: () {
+                    addInfo();
+                  },
+                ),
+              )),
               31.verticalSpacing,
             ],
           )),
